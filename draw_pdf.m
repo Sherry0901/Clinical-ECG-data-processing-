@@ -61,7 +61,7 @@ end
 
 axis([1 (leng+1) ymin ymax]);
 bigx=1:25*grid_step:leng+1;
-set(gca,'xtick',bigx,'xticklabel',((bigx-1)/100));
+set(gca,'xtick',bigx,'xticklabel',((bigx-1)/sample_rate));
 set(gca,'ytick',[],'yticklabel',[]);
 
 % text_l1=text(-15,(l1_position),'I');
