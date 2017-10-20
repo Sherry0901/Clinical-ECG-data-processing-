@@ -1,5 +1,5 @@
 % % % % % % % % % % % % % % % % % % % % %Ğ´ÈëÎÄ¼ş
-function write2file(l2,all_data,R,pacdir,pac_num,resultdir,name,samplerate)
+function write2file(l2,all_data,R,pacdir,pac_num,resultdir,name)
 figure(1);
 plot(l2);
 hold on

@@ -2,7 +2,7 @@
 %%Initialization
 clear;close all;clc;
 
-mydir='E:\素雅\研究生\心律失常判别及临床实验\临床实验\9.12\'; %放置当日心电数据的文件夹
+mydir='E:\素雅\研究生\心律失常判别及临床实验\临床实验\9.11\'; %放置当日心电数据的文件夹
 resultdir='E:\素雅\研究生\心律失常判别及临床实验\MATLAB代码\特征提取\临床R波提取结果\';%放置ECG结果数据的文件夹
 d = dir(mydir);
 isub = [d(:).isdir]; %# returns logical vector
@@ -34,35 +34,36 @@ for i=1:length(nameFolds)
             R_z=correction_R(l2,R,samplerate);
             R=R_z;
         end
-        write2file(l2,all_data,R,pacdir,pac_num,resultdir,name,samplerate);%将心电数据与R波数据保存为.xlsx文件
+        write2file(l2,all_data,R,pacdir,pac_num,resultdir,name);%将心电数据与R波数据保存为.xlsx文件
     end
 end
 % % % % % % % % 画ECG,保存为PDF文档
 for i=1:length(nameFolds)
-   
-%     fid = fopen('test.csv');  
-%     title = textscan(fid, '%s %s %s %s %s %s %s %s %s %s',1,'delimiter', ',');
-%     data = textscan(fid, ' %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %s','delimiter', ',');
-%     fclose(fid);
-%     dcells = textscan(fid, '%f, %f, %f, %s');  
-%     fclose(fid);  
-%     dcellneeds = dcells(1:3);  
-%     Mat = cell2mat(dcellneeds);  
-%     disp(Mat);  
-%     
+    
+    %     fid = fopen('test.csv');
+    %     title = textscan(fid, '%s %s %s %s %s %s %s %s %s %s',1,'delimiter', ',');
+    %     data = textscan(fid, ' %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %s','delimiter', ',');
+    %     fclose(fid);
+    %     dcells = textscan(fid, '%f, %f, %f, %s');
+    %     fclose(fid);
+    %     dcellneeds = dcells(1:3);
+    %     Mat = cell2mat(dcellneeds);
+    %     disp(Mat);    %测试代码，可忽略
+    
     name=cell2mat(nameFolds(i));
     pacdir=[mydir,name,'\']; %package文件的位置
-    pacR=[pacdir,name,'1R.xlsx'];
-    if exist (pacR,'file')
-        file_R=dir([pacdir,'*R.xlsx']);
-        for pacnum=1:length(file_R);
-            r_packagename=[pacdir,name,num2str(pacnum),'R.xlsx'];
-            data_packagename=[pacdir,name,num2str(pacnum),'alldata.xlsx'];
-            data=xlsread(data_packagename);    %读入心电数据
-            R_pdf=xlsread(r_packagename);  %读入R波位置数据
+    file_R=dir([pacdir,'*R.xlsx']);
+    file_data=dir([pacdir,'*alldata.xlsx']);
+    if   ~isempty(file_R)
+        for j=1:length(file_R);
+            r_packagename=file_R(j).name;
+            data_packagename=file_data(j).name;
+            data=xlsread([pacdir,data_packagename]);    %读入心电数据
+            R_pdf=xlsread([pacdir,r_packagename]);  %读入R波位置数据
             temp=dir([pacdir,'*package.txt']);
-            packagename=temp(pacnum).name;
-            draw_pdf(pacdir,name,packagename,samplerate,data,R_pdf,pacnum); %画ECG图
+            num=str2double(r_packagename(4));
+            packagename=temp(num).name;
+            draw_pdf(pacdir,name,packagename,samplerate,data,R_pdf,num); %画ECG图
         end
     end
 end
