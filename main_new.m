@@ -8,9 +8,9 @@ d = dir(mydir);
 isub = [d(:).isdir]; %# returns logical vector
 nameFolds = {d(isub).name}'; %得到文件夹里的姓名
 nameFolds(ismember(nameFolds,{'.','..'})) = [];
-samplerate=100; %采样频率%3字节
+samplerate=100; %采样频率
 
-for i=1:length(nameFolds)
+for i=3:length(nameFolds)
     name=cell2mat(nameFolds(i));
     pacdir=[mydir,name,'\']; %package文件的位置
     temp1=dir([pacdir,'*package.txt']);
@@ -38,7 +38,7 @@ for i=1:length(nameFolds)
     end
 end
 % % % % % % % % 画ECG,保存为PDF文档
-for i=1:length(nameFolds)
+for i=4:length(nameFolds)
     
     %     fid = fopen('test.csv');
     %     title = textscan(fid, '%s %s %s %s %s %s %s %s %s %s',1,'delimiter', ',');
@@ -61,7 +61,7 @@ for i=1:length(nameFolds)
             data=xlsread([pacdir,data_packagename]);    %读入心电数据
             R_pdf=xlsread([pacdir,r_packagename]);  %读入R波位置数据
             temp=dir([pacdir,'*package.txt']);
-            num=str2double(r_packagename(4));
+            num=str2double(r_packagename(regexp(r_packagename,'\d')));
             packagename=temp(num).name;
             draw_pdf(pacdir,name,packagename,samplerate,data,R_pdf,num); %画ECG图
         end

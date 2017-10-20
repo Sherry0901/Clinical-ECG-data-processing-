@@ -1,17 +1,18 @@
 % % % % % % % % % % % % % % % % % % % % %写入文件
-function write2file(l2,all_data,R,pacdir,pac_num,resultdir,name)
+function write2file(l2,all_data,R,pacdir,pac_num,~,name)
 figure(1);
 plot(l2);
 hold on
 handle_r=plot(R,l2(R),'*','color','R');  %绘制R波位置
+title(name,num2str(pac_num));
 % figure 窗口最大化，坐标轴也随着窗口变大而相应变大
 scrsz = get(0,'ScreenSize');  % 是为了获得屏幕大小，Screensize是一个4元素向量[left,bottom, width, height]
 set(gcf,'Position',scrsz);    % 用获得的screensize向量设置figure的position属性，实现最大化的目的
-axis([0, 7000,-0.5, 1.5 ]);   % 坐标轴的显示范围
+axis([0, 10000,-2, 3 ]);   % 坐标轴的显示范围
 for y=1:length(R)
     hnd_text_r(y)=text((R(y)-2),(l2(R(y))+0.1),num2str(y));  %标出R波的number
 end
-saveas(gcf,[resultdir,name,'.fig']);
+% saveas(gcf,[resultdir,name,'.fig']);
 iswrite=input('是否将R波信息写入文件，是请输入1，不是请输入0：'); %若数据太乱或者R波提取漏检严重，则暂时不要写进文件，待后续修改调试
 if iswrite
     delete_R_num=input('请输入需要删除的R波的波段个数，若无请输入0:');

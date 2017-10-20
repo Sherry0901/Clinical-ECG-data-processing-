@@ -3,10 +3,11 @@ function draw_pdf(pacdir,name,packagename,sample_rate,data,R,pacnum)
 close all;
 yunit=1;%等于1代表10mm/mv,等于2代表5mm/mv
 % R=R(3:(end-1));
-if strcmp(packagename(1:4),'test');
-    packagename=packagename(5:end);
-end
-time=packagename(5:14);
+% if strcmp(packagename(1:4),'test');
+%     packagename=packagename(5:end);
+% end
+time=packagename(regexp(packagename,'\d'));
+% time=packagename(5:14);
 time_date=[time(1:2),'/',time(3:4)];
 time_h=str2double(time(5:6));
 time_m=str2double(time(7:8));
