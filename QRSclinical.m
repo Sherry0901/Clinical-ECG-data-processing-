@@ -7,7 +7,7 @@ function QRSclinical(l2,R,f,f3)
 % [D]=textread(f1,'%f%*[^\n]');
 % [R]=textread(f2,'%d%*[^\n]');
 %初始化
-% f=125;                  %采样频率
+% f=100;                  %采样频率
 D=l2;
 lr=length(R);           
 T(lr,1)=double(0);      %T波位置
@@ -79,26 +79,32 @@ close all;
 pause(0.01);
 plot(l2,'b');
 hold on
-plot(R,l2(R),'*','color','R');     %绘制最大值点
-plot(Q,l2(Q),'o','color','R');     %绘制最大值点
-plot(S,l2(S),'s','color','R');     %绘制最大值点
-plot(P,l2(P),'d','color','R');     %绘制最大值点
-plot(T,l2(T),'v','color','R');     %绘制最大值点
+plot(P,l2(P),'d','MarkerFaceColor','R');     %绘制最大值点
+plot(Q,l2(Q),'o','MarkerFaceColor','R');     %绘制最大值点
+plot(R,l2(R),'*','Color','R');     %绘制最大值点
+plot(S,l2(S),'s','MarkerFaceColor','R');     %绘制最大值点
+plot(T,l2(T),'v','MarkerFaceColor','R');     %绘制最大值点
 pause
-%将特征写入文本
-fid=fopen(f3,'w+');
-fprintf(fid,'%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t%s\r\n','Pamp','Ramp','Tamp','PR','QRS','QT','ST','RRI','RRI(t-1)','type');
+
 ST=double((T-S)/f*1000);
 QT=double((T-Q)/f*1000);
 PR=double((Q-P)/f*1000);
 QRS=double((S-Q)/f*1000);
 
-for i=int32(5):lr-1
+%将特征写入文本
+fid=fopen(f3,'w+');
+fprintf(fid,'%s\r\n','Pamp Ramp,Tamp,PR,QRS,QT,ST,RRI,RRI(t-1),type');
+
+
+
+for i=int32(3):lr-1  %所以是从第三个R波开始记录
     Pamp(i,1)=D(P(i));
     Ramp(i,1)=D(R(i));
     Tamp(i,1)=D(T(i));
     RR(i,1)=double((R(i)-R(i-1))/f*1000);
     RRt(i,1)=double((R(i-1)-R(i-2))/f*1000);
-    fprintf(fid,'%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%.3f\t\t%s\r\n',Pamp(i),Ramp(i),Tamp(i),PR(i),QRS(i),QT(i),ST(i),RR(i),RRt(i),type(i));
+    fprintf(fid,'%.3f %s %.3f %s %.3f %s %.3f %s %.3f %s %.3f %s %.3f %s %.3f %s %.3f %s %s\r\n',...
+        Pamp(i),',',Ramp(i),',',Tamp(i),',',PR(i),',',QRS(i),',',QT(i),',',ST(i),',',RR(i),',',RRt(i),',',type(i));
 end
+ fclose(fid);
 end

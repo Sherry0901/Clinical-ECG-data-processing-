@@ -2,13 +2,13 @@
 %%Initialization
 clear;close all;clc;
 
-mydir='E:\素雅\研究生\心律失常判别及临床实验\临床实验\9.11\'; %放置当日心电数据的文件夹
+mydir='E:\素雅\研究生\心律失常判别及临床实验\临床实验\9.12\'; %放置当日心电数据的文件夹
 resultdir='E:\素雅\研究生\心律失常判别及临床实验\MATLAB代码\特征提取\临床R波提取结果\';%放置ECG结果数据的文件夹
 d = dir(mydir);
 isub = [d(:).isdir]; %# returns logical vector
 nameFolds = {d(isub).name}'; %得到文件夹里的姓名
 nameFolds(ismember(nameFolds,{'.','..'})) = [];
-sample_rate=100; %采样频率%3字节
+samplerate=100; %采样频率%3字节
 
 for i=1:length(nameFolds)
     name=cell2mat(nameFolds(i));
@@ -28,17 +28,28 @@ for i=1:length(nameFolds)
         avl=l1-0.5*l2;
         avf=l2-0.5*l1;
         all_data=[l1',l2',l3',avr',avl',avf',v1'];
-        R=detection_Rwave(l2,sample_rate);
+        R=detection_Rwave(l2,samplerate);
         
         for t=1:2  %循环两次，进行检查，以防误检和漏检在一个波中
-            R_z=correction_R(l2,R,sample_rate);
+            R_z=correction_R(l2,R,samplerate);
             R=R_z;
         end
-        write2file(l2,all_data,R,mydir,pac_num,resultdir,name);%将心电数据与R波数据保存为.xlsx文件
+        write2file(l2,all_data,R,pacdir,pac_num,resultdir,name,samplerate);%将心电数据与R波数据保存为.xlsx文件
     end
 end
 % % % % % % % % 画ECG,保存为PDF文档
 for i=1:length(nameFolds)
+   
+%     fid = fopen('test.csv');  
+%     title = textscan(fid, '%s %s %s %s %s %s %s %s %s %s',1,'delimiter', ',');
+%     data = textscan(fid, ' %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %s','delimiter', ',');
+%     fclose(fid);
+%     dcells = textscan(fid, '%f, %f, %f, %s');  
+%     fclose(fid);  
+%     dcellneeds = dcells(1:3);  
+%     Mat = cell2mat(dcellneeds);  
+%     disp(Mat);  
+%     
     name=cell2mat(nameFolds(i));
     pacdir=[mydir,name,'\']; %package文件的位置
     pacR=[pacdir,name,'1R.xlsx'];
@@ -51,7 +62,7 @@ for i=1:length(nameFolds)
             R_pdf=xlsread(r_packagename);  %读入R波位置数据
             temp=dir([pacdir,'*package.txt']);
             packagename=temp(pacnum).name;
-            draw_pdf(pacdir,name,packagename,sample_rate,data,R_pdf,pacnum); %画ECG图
+            draw_pdf(pacdir,name,packagename,samplerate,data,R_pdf,pacnum); %画ECG图
         end
     end
 end

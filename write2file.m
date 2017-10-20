@@ -1,5 +1,5 @@
 % % % % % % % % % % % % % % % % % % % % %写入文件
-function write2file(l2,all_data,R,mydir,pac_num,resultdir,name)
+function write2file(l2,all_data,R,pacdir,pac_num,resultdir,name,samplerate)
 figure(1);
 plot(l2);
 hold on
@@ -43,23 +43,26 @@ if iswrite
     delete(handle_r);
     delete(hnd_text_r);
     plot(R,l2(R),'*','color','R');     %绘制最大值点
+   
     for y=1:length(R)
         hnd_text_r(y)=text((R(y)-2),(l2(R(y))+0.1),num2str(y));
     end
     fprintf('Program paused. Press enter to continue.\n');
     pause;
-    close(figure(1));
-    pause(0.1);
     lr=length(R);
      type=cell(lr,1);
     for k=int32(1):lr
         type{k,1}='N';      %默认为正常
     end
-    
+
     R_type=[num2cell(R) type];
-    file_R=[mydir,'\',name,'\',name,num2str(pac_num),'R.xlsx'];
-    file_all_data=[mydir,'\',name,'\',name,num2str(pac_num),'alldata.xlsx'];
-    
+%     file_feature=[pacdir,name,num2str(pac_num),'_feature.csv'];   
+    file_R=[pacdir,name,num2str(pac_num),'R.xlsx'];
+    file_all_data=[pacdir,name,num2str(pac_num),'alldata.xlsx'];
+%     QRSclinical(l2,R,samplerate,file_feature);
     xlswrite(file_R,R_type);     %将R波信息写入 .xls
     xlswrite(file_all_data,all_data); %将心电数据写入 .xls
+end
+    close all;
+    pause(0.01);
 end
