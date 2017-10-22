@@ -10,7 +10,7 @@ nameFolds = {d(isub).name}'; %得到文件夹里的姓名
 nameFolds(ismember(nameFolds,{'.','..'})) = [];
 samplerate=100; %采样频率
 
-for i=3:length(nameFolds)
+for i=1:length(nameFolds)
     name=cell2mat(nameFolds(i));
     pacdir=[mydir,name,'\']; %package文件的位置
     temp1=dir([pacdir,'*package.txt']);
@@ -38,7 +38,7 @@ for i=3:length(nameFolds)
     end
 end
 % % % % % % % % 画ECG,保存为PDF文档
-for i=4:length(nameFolds)
+for i=1:length(nameFolds)
     
     %     fid = fopen('test.csv');
     %     title = textscan(fid, '%s %s %s %s %s %s %s %s %s %s',1,'delimiter', ',');

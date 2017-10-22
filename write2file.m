@@ -4,7 +4,7 @@ figure(1);
 plot(l2);
 hold on
 handle_r=plot(R,l2(R),'*','color','R');  %绘制R波位置
-title(name,num2str(pac_num));
+title([name,num2str(pac_num)]);
 % figure 窗口最大化，坐标轴也随着窗口变大而相应变大
 scrsz = get(0,'ScreenSize');  % 是为了获得屏幕大小，Screensize是一个4元素向量[left,bottom, width, height]
 set(gcf,'Position',scrsz);    % 用获得的screensize向量设置figure的position属性，实现最大化的目的

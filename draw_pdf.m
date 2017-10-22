@@ -8,10 +8,10 @@ yunit=1;%等于1代表10mm/mv,等于2代表5mm/mv
 % end
 time=packagename(regexp(packagename,'\d'));
 % time=packagename(5:14);
-time_date=[time(1:2),'/',time(3:4)];
-time_h=str2double(time(5:6));
-time_m=str2double(time(7:8));
-time_s=str2double(time(9:10));
+time_date=[time(1:4),'/',time(5:6),'/',time(7:8)];
+time_h=str2double(time(9:10));
+time_m=str2double(time(11:12));
+time_s=str2double(time(13:14));
 new_folder = [pacdir,'PDF',num2str(pacnum)]; % new_folder 保存要创建的文件夹，是绝对路径+文件夹名称
 if ~exist(new_folder,'dir')
 mkdir(new_folder);  % mkdir()函数创建文件夹
